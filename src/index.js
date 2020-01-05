@@ -4,6 +4,8 @@ import './index.css';
 import AuthorQuiz from './AuthorQuiz';
 import * as serviceWorker from './serviceWorker';
 import {shuffle, sample} from 'underscore';
+import {BrowserRouter, Route} from 'react-router-dom';
+import AddAuthorForm from './AddAuthorForm';
 
 const authors = [
     {
@@ -26,7 +28,7 @@ const authors = [
     },
     {
         name: 'Charles Dickens',
-        imageUrl: 'images/authors/charlesdickens.jpg',
+        imageUrl: 'images/authors/charlesdickens.png',
         imageSource: 'Wikimedia Commons',
         books: ['David Copperfield', 'A Tale of Two Cities']
     },
@@ -72,8 +74,23 @@ function onAnswerSelected(answer){
     render();
 }
 
+
+function App(){
+    return <AuthorQuiz {...state} onAnswerSelected={onAnswerSelected} />
+}
+
+function AddAuthorWrapper(){
+    return <AddAuthorForm onAddAuthor={console.log}></AddAuthorForm>
+}
+
 function render(){
-    ReactDOM.render(<AuthorQuiz {...state} onAnswerSelected={onAnswerSelected} />, document.getElementById('root'));
+    ReactDOM.render(<BrowserRouter>
+    <React.Fragment>
+        <Route exact path="/" component={App} />
+        <Route  path = "/add"  component = {AddAuthorWrapper} />
+    </React.Fragment>
+    
+    </BrowserRouter>, document.getElementById('root'));
 }
 
 render();
