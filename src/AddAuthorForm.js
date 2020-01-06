@@ -12,6 +12,7 @@ class AuthorForm extends React.Component{
         };
         this.onFieldChange= this.onFieldChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleAddBook = this.handleAddBook.bind(this);
     }
     handleSubmit(event){
         event.preventDefault();
@@ -42,7 +43,7 @@ class AuthorForm extends React.Component{
             <label htmlFor="bookTemp">Books</label>
             {this.state.books.map((book) => <p key={book}>{book}</p>)}
           
-            <input type="text" name="books" value={this.state.bookTemp} onChange={this.onFieldChange}></input>
+            <input type="text" name="bookTemp" value={this.state.bookTemp} onChange={this.onFieldChange}></input>
             <input type="button" value="+" onClick={this.handleAddBook}></input>
         </div>
         <input type="submit" value="Add"></input>
