@@ -64,58 +64,33 @@ function getTurnData(authors){
 
 
 }
-function resetState(){
-    return {
-        turnData:  getTurnData(authors),
-        highlight: ''
-    };
+
+function reducer(state= { authors, turnData: getTurnData(authors), highlight: ''}, action){
+    switch(action.type){
+        case 'ANSWER_SELECTED':
+            const isCorrect = state.turnData.author.books.some((book) => book === action.answer);
+            return Object.assign({}, state, {highlight: isCorrect? 'correct': 'wrong'});
+        case 'CONTINUE':
+            return Object.assign({}, state, {
+                highlight: '', turnData: getTurnData(state.authors)
+            });
+        case 'ADD_AUTHOR':
+            return Object.assign({}, state, {authors:state.authors.concat([action.author])
+            });
+        default: return state;
+    }
 }
 
-function reducer(state, action){
-    return state;
-}
 let store = Redux.createStore(reducer);
 
-
-let state=resetState();
-
-function onAnswerSelected(answer){
-    const isCorrect = state.turnData.author.books.some((book) => book === answer);
-    state.highlight = isCorrect? 'correct': 'wrong';
-    render();
-}
-
-
-function App(){
-    return <ReactRedux.Provider store={store}>
-       ><AuthorQuiz {...state} 
-        onAnswerSelected={onAnswerSelected}
-        onContinue={() => {
-            state= resetState();
-            render();
-        }} />;
-    </ReactRedux.Provider>;
-}
-
-const AddAuthorWrapper = withRouter(({history}) =>
-    <AddAuthorForm onAddAuthor={(author) => {
-        authors.push(author);
-        history.push('/');
-      }}/>
-);
-
-function render(){
-    ReactDOM.render(<BrowserRouter>
-    <React.Fragment>
-        <Route exact path="/" component={App} />
-        <Route  path = "/add"  component = {AddAuthorWrapper} />
-    </React.Fragment>
-    
-    </BrowserRouter>, document.getElementById('root'));
-}
-
-render();
-
+ReactDOM.render(<BrowserRouter>
+    <ReactRedux.Provider store={store}>
+        <React.Fragment>
+            <Route exact path="/" component={AuthorQuiz} />
+            <Route  path = "/add"  component = {AddAuthorForm} />
+        </React.Fragment>
+    </ReactRedux.Provider>  
+</BrowserRouter>, document.getElementById('root'));
 
 
 // If you want your app to work offline and load faster, you can change
