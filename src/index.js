@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import AuthorQuiz from './AuthorQuiz';
 import * as serviceWorker from './serviceWorker';
+import * as Redux from 'redux';
+import * as ReactRedux from 'react-redux';
 import {shuffle, sample} from 'underscore';
 import {BrowserRouter, Route, withRouter} from 'react-router-dom';
 import AddAuthorForm from './AddAuthorForm';
@@ -69,6 +71,12 @@ function resetState(){
     };
 }
 
+function reducer(state, action){
+    return state;
+}
+let store = Redux.createStore(reducer);
+
+
 let state=resetState();
 
 function onAnswerSelected(answer){
@@ -79,12 +87,14 @@ function onAnswerSelected(answer){
 
 
 function App(){
-    return <AuthorQuiz {...state} 
-    onAnswerSelected={onAnswerSelected}
-    onContinue={() => {
-        state= resetState();
-        render();
-    }} />;
+    return <ReactRedux.Provider store={store}>
+       ><AuthorQuiz {...state} 
+        onAnswerSelected={onAnswerSelected}
+        onContinue={() => {
+            state= resetState();
+            render();
+        }} />;
+    </ReactRedux.Provider>;
 }
 
 const AddAuthorWrapper = withRouter(({history}) =>

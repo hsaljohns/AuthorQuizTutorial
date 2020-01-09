@@ -3,6 +3,7 @@ import './App.css';
 import './bootstrap.min.css';
 import PropTypes from 'prop-types';
 import {Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 function Hero(){
   return (<div className="row">
@@ -74,8 +75,26 @@ function Footer(){
   </div>)
 }
 
-function AuthorQuiz({turnData, highlight, onAnswerSelected, onContinue}) {
-    console.log("In AuthorQuiz")
+function mapStateToProps(state){
+  return{
+    turnData: state.turnData,
+    highlight: state.highlight
+  };
+}
+
+function mapDispatchToProps(dispatch){
+  return{
+    onAnswerSelected: (answer) => {
+      dispatch({type: 'ANSWER_SELECTED', answer})
+    },
+    onContinue: () => {
+      dispatch({type: 'CONTINUE'});
+    }
+  };
+}
+
+const AuthorQuiz = connect(mapStateToProps, mapDispatchToProps) (
+  function ({turnData, highlight, onAnswerSelected, onContinue}) {
     return (
       <div className="container-fluid">
         <Hero/>
@@ -85,6 +104,6 @@ function AuthorQuiz({turnData, highlight, onAnswerSelected, onContinue}) {
         <Footer />
       </div>
     );
-}
+});
 
 export default AuthorQuiz;
